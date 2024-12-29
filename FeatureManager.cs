@@ -15,7 +15,7 @@ namespace ToggleX
             _featureProvider = featureProvider;
         }
 
-        public bool IsFeatureEnabled(string featureName, FeatureContext context)
+        public bool IsFeatureEnabled(string featureName, IFeatureContext context)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace ToggleX
             }
         }
 
-        private bool EvaluateCondition(bool isEnabled, string condition, FeatureContext context)
+        private bool EvaluateCondition(bool isEnabled, string condition, IFeatureContext context)
         {
             condition = condition.Replace("'", "\"");
 
@@ -70,16 +70,16 @@ namespace ToggleX
             try
             {
                 var result = DynamicExpressionParser
-                    .ParseLambda<FeatureContext, bool>(null, true, condition)
+                    .ParseLambda(context.GetType(), typeof(bool), condition)
                     .Compile()
-                    .Invoke(context);
+                    .DynamicInvoke(context);
 
-                if (!result)
+                if (result is bool resultBool && !resultBool)
                 {
                     throw new ConditionEvaluationException(condition, contextDetails, $"\n\tCondition failed: {condition}, \n\tContext Details: {contextDetails}");
                 }
 
-                return result;
+                return true;
             }
             catch (Exception ex)
             {
@@ -88,29 +88,31 @@ namespace ToggleX
             }
         }
 
-        private string GetContextDetails(FeatureContext context)
+        private string GetContextDetails(IFeatureContext context)
         {
             var contextDetails = new StringBuilder();
 
             if (context != null)
             {
-                foreach (var prop in context.GetType().GetProperties())
+                var properties = context.GetType().GetProperties();
+
+                foreach (var prop in properties)
                 {
                     var value = prop.GetValue(context);
 
                     if (value is string)
                     {
                         contextDetails.Append($"{prop.Name}: \"{value}\", ");
-                        continue;
                     }
-
-                    contextDetails.Append($"{prop.Name}: {value}, ");
+                    else
+                    {
+                        contextDetails.Append($"{prop.Name}: {value}, ");
+                    }
                 }
             }
 
             return contextDetails.ToString();
         }
-
         private List<string> GetMissingDependencies(List<string> dependencies)
         {
             var missingDependencies = new List<string>();
