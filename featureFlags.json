@@ -1,0 +1,20 @@
+[
+    {
+        "Name": "AdvancedSearch",
+        "IsEnabled": true,
+        "DefaultEnabled": false,
+        "DependsOn": ["SearchEngine"],
+        "Rules": [
+            {
+                "Condition": "UserRole == 'Admin'",
+                "IsEnabled": true
+            }
+        ]
+    },
+    {
+        "Name": "SearchEngine",
+        "IsEnabled": true,
+        "DefaultEnabled": false,
+        "DependsOn": []
+    }
+]
