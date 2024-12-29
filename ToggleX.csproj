@@ -4,6 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+     <Version>1.0.1</Version>
+     <Authors>Elijah Koulaxis</Authors>
+     <PackageId>ToggleX</PackageId>
+     <Description>
+         ToggleX is a flexible feature flagging library for .NET applications. It helps developers to manage feature toggles dynamically with support for custom evaluation contexts, JSON-based configuration, dependency handling, and detailed logging. Perfect for A/B testing, feature rollouts, and user-specific functionality control.
+     </Description>
+     <Copyright>Elijah Koulaxis © 2024</Copyright>
+     <RepositoryUrl>https://github.com/kx0101/ToggleX</RepositoryUrl>
+     <PackageTags>feature-flags toggling configuration json</PackageTags>
+     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
