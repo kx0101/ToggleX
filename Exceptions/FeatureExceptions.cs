@@ -13,8 +13,13 @@ namespace ToggleX.Exceptions
 
     public class ConditionEvaluationException : Exception
     {
-        public string Condition { get; }
-        public string ContextDetails { get; }
+        public string? Condition { get; }
+        public string? ContextDetails { get; }
+
+        public ConditionEvaluationException(string message)
+            : base(message)
+        {
+        }
 
         public ConditionEvaluationException(string condition, string contextDetails, string message)
             : base(message)

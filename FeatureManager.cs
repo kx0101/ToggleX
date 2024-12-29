@@ -41,7 +41,7 @@ namespace ToggleX
                 {
                     foreach (var rule in feature.Rules)
                     {
-                        if (EvaluateCondition(rule.Condition, context))
+                        if (EvaluateCondition(rule.IsEnabled, rule.Condition, context))
                         {
                             return rule.IsEnabled;
                         }
@@ -56,14 +56,19 @@ namespace ToggleX
             }
         }
 
-        private bool EvaluateCondition(string condition, FeatureContext context)
+        private bool EvaluateCondition(bool isEnabled, string condition, FeatureContext context)
         {
+            condition = condition.Replace("'", "\"");
+
+            var contextDetails = GetContextDetails(context);
+
+            if (!isEnabled)
+            {
+                throw new ConditionEvaluationException($"\n\trule: {condition} for this feature is disabled");
+            }
+
             try
             {
-                condition = condition.Replace("'", "\"");
-
-                var contextDetails = GetContextDetails(context);
-
                 var result = DynamicExpressionParser
                     .ParseLambda<FeatureContext, bool>(null, true, condition)
                     .Compile()
@@ -78,7 +83,7 @@ namespace ToggleX
             }
             catch (Exception ex)
             {
-                var contextDetails = context != null ? GetContextDetails(context) : "No context details available (context is null)";
+                contextDetails = context != null ? GetContextDetails(context) : "No context details available (context is null)";
                 throw new ConditionEvaluationException(condition, contextDetails, ex.Message, ex);
             }
         }
