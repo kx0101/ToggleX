@@ -28,6 +28,7 @@ The core components of the library are:
 ### 1. Install the Library
 
 You can install the ToggleX library via NuGet Package Manager or .NET CLI.
+
 `dotnet add package ToggleX`
 
 ### 2. Feature Configuration (using JSON)
