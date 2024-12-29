@@ -5,6 +5,5 @@ namespace ToggleX.Models
         public string Condition { get; set; }
 
         public bool IsEnabled { get; set; }
-
     }
 }

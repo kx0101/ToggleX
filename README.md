@@ -130,7 +130,7 @@ public class FeatureFlagAttribute : Attribute, IActionFilter
             {
                 context.Result = new ContentResult
                 {
-                    Content = "Feature is disabled..\",
+                    Content = "Feature is disabled..\n",
                     StatusCode = 403
                 };
             }
